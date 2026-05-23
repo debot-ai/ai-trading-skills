@@ -28,19 +28,26 @@ If missing, install:
 
 **macOS / Linux:**
 ```bash
-sh skills/trade/install.sh
+curl -sSL https://raw.githubusercontent.com/debot-ai/ai-trading-skills/main/skills/trade/install.sh | sh
 ```
 
 **Windows (Git Bash / WSL):**
 ```bash
+curl -sSL https://raw.githubusercontent.com/debot-ai/ai-trading-skills/main/skills/trade/install.sh | sh
+```
+
+If this repository has already been cloned locally, the same installer can also be run directly:
+```bash
 sh skills/trade/install.sh
 ```
+
+The installer and client artifacts are maintained in this repository under `skills/trade/`. Do not install from the upstream `tvyvnjs/debot-trade` repository.
 
 After install, run `debot-trade-cli` with no args to confirm it works and see help.
 
 ### 2. Update
 
-Re-running the local install script will reinstall the vendored client version in place.
+Re-running the installer from this repository will reinstall the vendored client version in place.
 
 **When to update:** Only update the vendored client artifacts when a user explicitly requests an update, the command returns an unexpected error that may indicate a version issue, or a new feature not supported by the current version is needed. Do not check for updates on every call.
 

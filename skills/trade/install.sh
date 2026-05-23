@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-# debot-trade-cli installer using the client artifacts vendored in this directory.
+# debot-trade-cli installer using client artifacts from the Debot open skills repo.
 
 BINARY_NAME="debot-trade-cli"
 VERSION="v0.0.2"
@@ -9,6 +9,7 @@ INSTALL_DIR="$HOME/.local/bin"
 
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
 CLIENT_DIR="${SCRIPT_DIR}/client/${VERSION}"
+CLIENT_BASE_URL="${DEBOT_TRADE_CLIENT_BASE_URL:-https://raw.githubusercontent.com/debot-ai/ai-trading-skills/main/skills/trade/client/${VERSION}}"
 
 info()  { printf "\033[1;34m[INFO]\033[0m  %s\n" "$1"; }
 warn()  { printf "\033[1;33m[WARN]\033[0m  %s\n" "$1"; }
@@ -91,10 +92,6 @@ install() {
     detect_os
     detect_arch
 
-    if [ ! -d "$CLIENT_DIR" ]; then
-        error "Client directory not found: $CLIENT_DIR"
-    fi
-
     if [ "$OS" = "windows" ]; then
         ARCHIVE_EXT=".zip"
     else
@@ -103,12 +100,29 @@ install() {
     fi
 
     ARCHIVE_NAME="${BINARY_NAME}-${OS}-${ARCH}${ARCHIVE_EXT}"
-    ARCHIVE_PATH="${CLIENT_DIR}/${ARCHIVE_NAME}"
-    CHECKSUM_PATH="${CLIENT_DIR}/checksums-md5.txt"
+    CHECKSUM_NAME="checksums-md5.txt"
+
+    TMP_DIR=$(mktemp -d)
+    trap 'rm -rf "$TMP_DIR"' EXIT
+
+    if [ -f "${CLIENT_DIR}/${ARCHIVE_NAME}" ]; then
+        ARCHIVE_PATH="${CLIENT_DIR}/${ARCHIVE_NAME}"
+        CHECKSUM_PATH="${CLIENT_DIR}/${CHECKSUM_NAME}"
+        CLIENT_SOURCE="$ARCHIVE_PATH"
+    else
+        need_cmd curl
+        ARCHIVE_PATH="${TMP_DIR}/${ARCHIVE_NAME}"
+        CHECKSUM_PATH="${TMP_DIR}/${CHECKSUM_NAME}"
+        CLIENT_SOURCE="${CLIENT_BASE_URL}/${ARCHIVE_NAME}"
+
+        info "Downloading client from Debot open skills repo ..."
+        curl -fL --retry 3 --retry-delay 1 -o "$ARCHIVE_PATH" "$CLIENT_SOURCE"
+        curl -fL --retry 3 --retry-delay 1 -o "$CHECKSUM_PATH" "${CLIENT_BASE_URL}/${CHECKSUM_NAME}" || warn "MD5 checksum file not available, skipping verification"
+    fi
 
     info "Platform: ${OS}/${ARCH}"
     info "Version:  ${VERSION}"
-    info "Client:   ${ARCHIVE_PATH}"
+    info "Client:   ${CLIENT_SOURCE}"
     echo ""
 
     if [ ! -f "$ARCHIVE_PATH" ]; then
@@ -130,9 +144,6 @@ install() {
     else
         warn "MD5 checksum file not found, skipping verification"
     fi
-
-    TMP_DIR=$(mktemp -d)
-    trap 'rm -rf "$TMP_DIR"' EXIT
 
     info "Extracting ..."
     if [ "$OS" = "windows" ]; then
