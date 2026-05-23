@@ -28,21 +28,21 @@ If missing, install:
 
 **macOS / Linux:**
 ```bash
-curl -sSL https://raw.githubusercontent.com/tvyvnjs/debot-trade/main/install.sh | sh
+sh skills/trade/install.sh
 ```
 
-**Windows (PowerShell):**
-```powershell
-irm https://raw.githubusercontent.com/tvyvnjs/debot-trade/main/install.ps1 | iex
+**Windows (Git Bash / WSL):**
+```bash
+sh skills/trade/install.sh
 ```
 
 After install, run `debot-trade-cli` with no args to confirm it works and see help.
 
 ### 2. Update
 
-Re-running the install script will update it in place
+Re-running the local install script will reinstall the vendored client version in place.
 
-**When to update:** Only update when a user explicitly requests an update, the command returns an unexpected error that may indicate a version issue, a new feature not supported by the current version is needed, or more than 24 hours have passed since the last update. Do not check for updates on every call.
+**When to update:** Only update the vendored client artifacts when a user explicitly requests an update, the command returns an unexpected error that may indicate a version issue, or a new feature not supported by the current version is needed. Do not check for updates on every call.
 
 ### 3. Configure API Credentials
 
