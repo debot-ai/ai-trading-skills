@@ -1,6 +1,6 @@
-9330619017ac2a2a0a99fa74e0561e5a  debot-trade-cli-darwin-amd64.tar.gz
-f65ab42e47f8b32d109c102fbbbb5e12  debot-trade-cli-darwin-arm64.tar.gz
-aaaca1b2cd57f1532fc644a54674ce58  debot-trade-cli-linux-amd64.tar.gz
-ae9c6a36b1da4eb0e19adc81eeb0e1a5  debot-trade-cli-linux-arm64.tar.gz
-e5e4649aa9cbc2a7aa2824d0e6232e3e  debot-trade-cli-windows-amd64.zip
-e9866e0e753695c174359ec1441affbe  debot-trade-cli-windows-arm64.zip
+a18c164fe3a49fee891a209d4a3504f7  debot-trade-cli-darwin-amd64.tar.gz
+752ed0e25c2ac37a17cd9df3611a0495  debot-trade-cli-darwin-arm64.tar.gz
+3f02998638a63e0d14581d3ed6697ebd  debot-trade-cli-linux-amd64.tar.gz
+f0ec0780f80a1424ee3431ac116b8749  debot-trade-cli-linux-arm64.tar.gz
+0f6920854f0f278973ff42da956d38a5  debot-trade-cli-windows-amd64.zip
+5f40ec0156493f45ded57da4fc095362  debot-trade-cli-windows-arm64.zip
