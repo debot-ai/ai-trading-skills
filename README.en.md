@@ -22,7 +22,7 @@ Path: `skills/trade/skills.md`
 | On-chain trading | Buy, sell, and swap any on-chain token |
 | Percentage sell | Sell a percentage of the current token holdings |
 | Custom transaction signing and broadcast | Sign and broadcast EVM calldata or Solana serialized transaction messages |
-| Multi-chain support | Supports Solana, Ethereum, BNB Chain, Base, XLayer, and Monad |
+| Multi-chain support | Supports Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, and Robinhood Chain |
 | Multi-DEX support | Integrates with Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and other DEX or trading scenarios |
 
 #### CLI Commands
