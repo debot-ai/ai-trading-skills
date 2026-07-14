@@ -1,11 +1,11 @@
 ---
 name: debot-trade
-description: "On-chain token trading across multiple blockchains via debot-trade-cli — a server-side wallet tool that requires no browser wallet. Supports buying, selling, swapping any on-chain tokens, signing and broadcasting custom raw transactions. Works across Solana, ETH, BSC, Base, XLayer, and Monad, integrating with DEXes including Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and others. Use this skill whenever the user wants to swap, buy, sell, trade any on-chain token & sign or broadcast a custom transaction — even if they don't mention \"debot\""
+description: "On-chain token trading across multiple blockchains via debot-trade-cli — a server-side wallet tool that requires no browser wallet. Supports buying, selling, swapping any on-chain tokens, signing and broadcasting custom raw transactions. Works across Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, and Robinhood Chain, integrating with DEXes including Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and others. Use this skill whenever the user wants to swap, buy, sell, trade any on-chain token & sign or broadcast a custom transaction — even if they don't mention \"debot\""
 ---
 
 # debot-trade Skill
 
-Server-side on-chain trading across 6 chains via `debot-trade-cli`. No browser wallet required.
+Server-side on-chain trading across 8 chains via `debot-trade-cli`. No browser wallet required.
 
 | # | Capability | CLI Command | Description |
 |---|-----------|-------------|-------------|
@@ -78,6 +78,8 @@ Use these exact strings for the `--chain` parameter:
 | Base      | `base`          |
 | XLayer    | `xlayer`        |
 | Monad     | `monad`         |
+| HyperEVM  | `hyperevm`      |
+| Robinhood Chain | `robinhood` |
 
 ### 3.2 Native Token Addresses
 
@@ -86,17 +88,19 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 | Chain                                   | Native Token Address                           |
 |-----------------------------------------|------------------------------------------------|
 | Solana                                  | `So11111111111111111111111111111111111111112`  |
-| ETH / BSC / Base / XLayer / Monad (EVM) | `0x0000000000000000000000000000000000000000`  |
+| ETH / BSC / Base / XLayer / Monad / HyperEVM / Robinhood Chain (EVM) | `0x0000000000000000000000000000000000000000`  |
 
-### 3.3 USDC Addresses (EVM chains)
+### 3.3 Supported Stable-token Addresses (EVM chains)
 
-| Chain   | USDC Address                                   |
-|---------|------------------------------------------------|
-| eth     | `0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48`  |
-| bsc     | `0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d`  |
-| base    | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`  |
-| xlayer  | `0x74b7f16337b8972027f6196a17a631ac6de26d22`  |
-| monad   | `0x754704Bc059F8C67012fEd69BC8A327a5aafb603`  |
+| Chain   | Token | Address                                   |
+|---------|-------|-------------------------------------------|
+| eth     | USDC  | `0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48` |
+| bsc     | USDC  | `0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d` |
+| base    | USDC  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
+| xlayer  | USDC  | `0x74b7f16337b8972027f6196a17a631ac6de26d22` |
+| monad   | USDC  | `0x754704Bc059F8C67012fEd69BC8A327a5aafb603` |
+| hyperevm | USDC | `0xb88339CB7199b77E23DB6E890353E22632Ba630f` |
+| robinhood | USDG | `0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168` |
 
 ### 3.4 Amount Units
 
@@ -106,7 +110,8 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 |-------------------|------------------------------|----------|---------------------------------------------|
 | Native (ETH/BNB…) | EVM                          | 18       | `0.01 ETH` → `10000000000000000`            |
 | Native (SOL)      | Solana                       | 9        | `1 SOL` → `1000000000`                      |
-| USDC              | ETH / Base / XLayer / Monad  | 6        | `6 USDC` → `6000000`                        |
+| USDC              | ETH / Base / XLayer / Monad / HyperEVM | 6 | `6 USDC` → `6000000`                |
+| USDG              | Robinhood Chain               | 6        | `6 USDG` → `6000000`                        |
 | USDC              | BSC                          | 18       | `6 USDC` → `6000000000000000000`            |
 
 Formula: `amount_onchain = int(human_amount × 10^decimals)`
@@ -222,7 +227,7 @@ debot-trade-cli sign-tx \
 
 | Chain  | Format | Description |
 |--------|--------|-------------|
-| EVM (eth / bsc / base / xlayer / monad) | Hex string, e.g. `0x1234abcd` | ABI-encoded call data only — **not** a full RLP-encoded transaction. Pass `0x` for a plain ETH transfer with no calldata. |
+| EVM (eth / bsc / base / xlayer / monad / hyperevm / robinhood) | Hex string, e.g. `0x1234abcd` | ABI-encoded call data only — **not** a full RLP-encoded transaction. Pass `0x` for a plain ETH transfer with no calldata. |
 | Solana | Base64 string | Serialized transaction message bytes encoded as base64. |
 
 **Quickstart example — EVM (ETH transfer, no calldata):**
