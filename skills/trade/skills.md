@@ -1,6 +1,6 @@
 ---
 name: debot-trade
-description: "On-chain token trading across multiple blockchains via debot-trade-cli — a server-side wallet tool that requires no browser wallet. Supports buying, selling, swapping any on-chain tokens, signing and broadcasting custom raw transactions. Works across Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, and Robinhood Chain, integrating with DEXes including Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and others. Use this skill whenever the user wants to swap, buy, sell, trade any on-chain token & sign or broadcast a custom transaction — even if they don't mention \"debot\""
+description: "On-chain token trading across multiple blockchains via debot-trade-cli — a server-side wallet tool that requires no browser wallet. Supports buying, selling, swapping any on-chain tokens, buying with take-profit and stop-loss orders, and signing and broadcasting custom raw transactions. Works across Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, and Robinhood Chain, integrating with DEXes including Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and others. Use this skill whenever the user wants to swap, buy, sell, trade, set take-profit or stop-loss rules for a token purchase, or sign or broadcast a custom transaction — even if they don't mention \"debot\""
 ---
 
 # debot-trade Skill
@@ -11,7 +11,8 @@ Server-side on-chain trading across 8 chains via `debot-trade-cli`. No browser w
 |---|-----------|-------------|-------------|
 | 1 | **List Wallets** | `wallets` | List all wallets associated with the configured API key |
 | 2 | **Trade** | `trade` | Buy / sell / swap any on-chain token across supported chains and DEXes |
-| 3 | **Sign & Broadcast Custom Transaction** | `sign-tx` | Sign and broadcast a custom transaction — EVM hex calldata or Solana base64 serialized message |
+| 3 | **Buy with Take Profit / Stop Loss** | `buy-tpsl` | Buy a token and create one or more fixed take-profit / stop-loss orders |
+| 4 | **Sign & Broadcast Custom Transaction** | `sign-tx` | Sign and broadcast a custom transaction — EVM hex calldata or Solana base64 serialized message |
 
 ---
 
@@ -128,6 +129,8 @@ After a successful transaction, always present the explorer link:
 | base    | `https://basescan.org/tx/{tx_hash}`                        |
 | xlayer  | `https://www.oklink.com/zh-hans/x-layer/tx/{tx_hash}`     |
 | monad   | `https://monadvision.com/tx/{tx_hash}`                     |
+| hyperevm | `https://hyperevmscan.io/tx/{tx_hash}`                    |
+| robinhood | `https://rh-scan.com/tx/{tx_hash}`                       |
 
 Portfolio overview: `https://debot.ai/address/{chain}/{wallet_address}`
 
@@ -135,7 +138,7 @@ Portfolio overview: `https://debot.ai/address/{chain}/{wallet_address}`
 
 ## API Capabilities & Quickstart
 
-Three CLI commands cover all use cases:
+Four CLI commands cover all use cases:
 
 ### Command 1 — List Wallets
 
@@ -207,7 +210,72 @@ debot-trade-cli trade \
 
 ---
 
-### Command 3 — Sign & Broadcast Custom Transaction
+### Command 3 — Buy with Take Profit / Stop Loss
+
+Use `buy-tpsl` to submit a token purchase and create fixed take-profit and/or stop-loss orders for the bought amount:
+
+```bash
+debot-trade-cli buy-tpsl \
+  --chain <chain> \
+  [--token-in <address>] \
+  --token-out <address> \
+  --amount <smallest_unit_integer> \
+  --public-key <wallet_address> \
+  [--take-profit <price_up_bps:sell_bps>]... \
+  [--stop-loss <price_down_bps:sell_bps>]... \
+  [--slippage-bps 3000] \
+  [--base-gas-fee <wei_or_lamports>] \
+  [--priority-fee <wei_or_lamports>] \
+  [--tips <lamports_solana_only>] \
+  [--max-fee-per-gas <wei_evm_only>] \
+  [--anti-mev 0|1] \
+  [--expire-period <seconds>] \
+  [--task-id <32_hex_chars_no_hyphens>]
+```
+
+**Required:** `--chain`, `--token-out`, `--amount`, `--public-key`, and at least one `--take-profit` or `--stop-loss`. If `--token-in` is omitted, the CLI uses the chain's native token.
+
+Use the chain's native token or a supported stable token from §3.3 as `--token-in`. As with `trade`, at least one side of the token pair must be native or a supported stable token.
+
+Rule format and constraints:
+
+- Repeat `--take-profit price_up_bps:sell_bps` or `--stop-loss price_down_bps:sell_bps` to create multiple rules.
+- `10000` bps equals 100%. For take profit, `10000` means up 100% (2x), `40000` means up 400% (5x), and `90000` means up 900% (10x).
+- For stop loss, `5000` means down 50%; `price_down_bps` must be `1-9999`.
+- `sell_bps` must be `1-10000` and is the percentage of the bought amount to sell; `5000` means 50%.
+- `--expire-period` is the auto-sell order lifetime in seconds. Omit it to use the server default.
+- Chain-aware defaults apply only when the corresponding flag is omitted: EVM uses `--base-gas-fee 100000000` (0.1 Gwei); Solana uses `--priority-fee 100000` and `--tips 100000` (0.0001 SOL each).
+
+Buy with 1 SOL, sell 50% at 2x, 20% at 5x, 30% at 10x, and stop loss at -50%:
+
+```bash
+debot-trade-cli buy-tpsl \
+  --chain solana \
+  --token-out <TOKEN_ADDR> \
+  --amount 1000000000 \
+  --public-key <WALLET> \
+  --take-profit 10000:5000 \
+  --take-profit 40000:2000 \
+  --take-profit 90000:3000 \
+  --stop-loss 5000:10000
+```
+
+Buy with 0.01 ETH on Base, sell 50% of the bought amount at 2x, and stop out the bought amount at -50%:
+
+```bash
+debot-trade-cli buy-tpsl \
+  --chain base \
+  --token-in 0x0000000000000000000000000000000000000000 \
+  --token-out <TOKEN_ADDR> \
+  --amount 10000000000000000 \
+  --public-key <WALLET> \
+  --take-profit 10000:5000 \
+  --stop-loss 5000:10000
+```
+
+---
+
+### Command 4 — Sign & Broadcast Custom Transaction
 
 ```bash
 debot-trade-cli sign-tx \
@@ -273,6 +341,7 @@ Map user language to the correct command:
 | "show my wallets", "list addresses"             | `wallets`                        |
 | "buy", "swap", "trade", "sell X for Y"          | `trade`                          |
 | "sell X%", "sell half my…"                      | `trade` with `--sell-percentage` |
+| "buy with take profit", "buy and stop loss"      | `buy-tpsl`                       |
 | "sign this tx", "broadcast raw tx", "send tx"   | `sign-tx`                        |
 
 ### Step 2 — Confirm Trade Details with the User
@@ -282,6 +351,7 @@ Map user language to the correct command:
 - Token-in and token-out addresses
 - Exact amount (in human-readable form — convert to on-chain units before submitting)
 - Chain
+- For `buy-tpsl`, every take-profit / stop-loss trigger, sell percentage, and optional expiration
 
 Do not proceed until the user has explicitly confirmed the trade amount and wallet. See Security Rules below.
 
@@ -322,7 +392,9 @@ Portfolio:  https://debot.ai/address/<chain>/<wallet>
 | 88006 | Submission timeout — check balance or increase gas fee       |
 | 88008 | Pool liquidity too low for this trade                        |
 | 88015 | Token not supported on this chain/DEX                        |
+| 88016 | Gas price is below the blockchain base fee — increase the gas price |
 | 88017 | Insufficient token balance to sell                           |
+| 88035 | No route is currently available — trading is temporarily unsupported |
 | other | Show the raw error message                                   |
 
 **Never auto-retry** on any failure. Always report the error and ask the user how to proceed.
