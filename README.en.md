@@ -21,6 +21,7 @@ Path: `skills/trade/skills.md`
 | Wallet list | List all wallet addresses bound to the current API key |
 | On-chain trading | Buy, sell, and swap any on-chain token |
 | Percentage sell | Sell a percentage of the current token holdings |
+| Buy with take profit / stop loss | Buy a token and create one or more fixed take-profit and stop-loss orders |
 | Custom transaction signing and broadcast | Sign and broadcast EVM calldata or Solana serialized transaction messages |
 | Multi-chain support | Supports Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, and Robinhood Chain |
 | Multi-DEX support | Integrates with Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and other DEX or trading scenarios |
@@ -31,11 +32,13 @@ Path: `skills/trade/skills.md`
 | --- | --- |
 | `wallets` | List available wallets for the current account |
 | `trade` | Execute buy, sell, and swap transactions |
+| `buy-tpsl` | Buy a token and create fixed take-profit and stop-loss orders |
 | `sign-tx` | Sign and broadcast custom transactions |
 
 #### Use Cases
 
 - Let AI agents execute on-chain buy, sell, or swap transactions after explicit user confirmation
+- Buy tokens with tiered take-profit targets and a stop-loss
 - Manage Debot wallets and initiate trades in server-side environments
 - Integrate custom transaction signing and broadcasting for Solana or EVM chains
 - Build trading bots, automated trading tools, strategy executors, or AI trading assistants
