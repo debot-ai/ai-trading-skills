@@ -23,7 +23,7 @@
 | 按比例卖出 | 支持按当前持仓百分比卖出 Token |
 | 买入并止盈止损 | 买入 Token 后创建一条或多条固定止盈、止损订单 |
 | 自定义交易签名与广播 | 支持签名并广播 EVM calldata 或 Solana 序列化交易消息 |
-| 多链支持 | 支持 Solana、Ethereum、BNB Chain、Base、XLayer、Monad、HyperEVM、Robinhood Chain |
+| 多链支持 | 支持 Solana、Ethereum、BNB Chain、Base、XLayer、Monad、HyperEVM、Robinhood Chain、Arbitrum、Stable、Arc |
 | 多 DEX 支持 | 集成 Uniswap、PancakeSwap、PumpFun、FourMeme、Flap 等 DEX 或交易场景 |
 
 #### CLI 命令

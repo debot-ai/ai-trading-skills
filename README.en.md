@@ -23,7 +23,7 @@ Path: `skills/trade/skills.md`
 | Percentage sell | Sell a percentage of the current token holdings |
 | Buy with take profit / stop loss | Buy a token and create one or more fixed take-profit and stop-loss orders |
 | Custom transaction signing and broadcast | Sign and broadcast EVM calldata or Solana serialized transaction messages |
-| Multi-chain support | Supports Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, and Robinhood Chain |
+| Multi-chain support | Supports Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, Robinhood Chain, Arbitrum, Stable, and Arc |
 | Multi-DEX support | Integrates with Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and other DEX or trading scenarios |
 
 #### CLI Commands

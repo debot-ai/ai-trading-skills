@@ -1,11 +1,11 @@
 ---
 name: debot-trade
-description: "On-chain token trading across multiple blockchains via debot-trade-cli — a server-side wallet tool that requires no browser wallet. Supports buying, selling, swapping any on-chain tokens, buying with take-profit and stop-loss orders, and signing and broadcasting custom raw transactions. Works across Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, and Robinhood Chain, integrating with DEXes including Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and others. Use this skill whenever the user wants to swap, buy, sell, trade, set take-profit or stop-loss rules for a token purchase, or sign or broadcast a custom transaction — even if they don't mention \"debot\""
+description: "On-chain token trading across multiple blockchains via debot-trade-cli — a server-side wallet tool that requires no browser wallet. Supports buying, selling, swapping any on-chain tokens, buying with take-profit and stop-loss orders, and signing and broadcasting custom raw transactions. Works across Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, Robinhood Chain, Arbitrum, Stable, and Arc, integrating with DEXes including Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and others. Use this skill whenever the user wants to swap, buy, sell, trade, set take-profit or stop-loss rules for a token purchase, or sign or broadcast a custom transaction — even if they don't mention \"debot\""
 ---
 
 # debot-trade Skill
 
-Server-side on-chain trading across 8 chains via `debot-trade-cli`. No browser wallet required.
+Server-side on-chain trading across 11 chains via `debot-trade-cli`. No browser wallet required.
 
 | # | Capability | CLI Command | Description |
 |---|-----------|-------------|-------------|
@@ -81,6 +81,9 @@ Use these exact strings for the `--chain` parameter:
 | Monad     | `monad`         |
 | HyperEVM  | `hyperevm`      |
 | Robinhood Chain | `robinhood` |
+| Arbitrum  | `arbitrum`      |
+| Stable    | `stable`        |
+| Arc       | `arc`           |
 
 ### 3.2 Native Token Addresses
 
@@ -89,7 +92,7 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 | Chain                                   | Native Token Address                           |
 |-----------------------------------------|------------------------------------------------|
 | Solana                                  | `So11111111111111111111111111111111111111112`  |
-| ETH / BSC / Base / XLayer / Monad / HyperEVM / Robinhood Chain (EVM) | `0x0000000000000000000000000000000000000000`  |
+| ETH / BSC / Base / XLayer / Monad / HyperEVM / Robinhood Chain / Arbitrum / Stable / Arc (EVM) | `0x0000000000000000000000000000000000000000`  |
 
 ### 3.3 Supported Stable-token Addresses (EVM chains)
 
@@ -102,6 +105,9 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 | monad   | USDC  | `0x754704Bc059F8C67012fEd69BC8A327a5aafb603` |
 | hyperevm | USDC | `0xb88339CB7199b77E23DB6E890353E22632Ba630f` |
 | robinhood | USDG | `0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168` |
+| arbitrum | USDC | `0xaf88d065e77c8cC2239327C5EDb3A432268e5831` |
+
+`stable` and `arc` do not support USDC trading. Do not use a USDC contract address as the stable-token side of a trade on either chain.
 
 ### 3.4 Amount Units
 
@@ -111,7 +117,7 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 |-------------------|------------------------------|----------|---------------------------------------------|
 | Native (ETH/BNB…) | EVM                          | 18       | `0.01 ETH` → `10000000000000000`            |
 | Native (SOL)      | Solana                       | 9        | `1 SOL` → `1000000000`                      |
-| USDC              | ETH / Base / XLayer / Monad / HyperEVM | 6 | `6 USDC` → `6000000`                |
+| USDC              | ETH / Base / XLayer / Monad / HyperEVM / Arbitrum | 6 | `6 USDC` → `6000000` |
 | USDG              | Robinhood Chain               | 6        | `6 USDG` → `6000000`                        |
 | USDC              | BSC                          | 18       | `6 USDC` → `6000000000000000000`            |
 
@@ -131,6 +137,9 @@ After a successful transaction, always present the explorer link:
 | monad   | `https://monadvision.com/tx/{tx_hash}`                     |
 | hyperevm | `https://hyperevmscan.io/tx/{tx_hash}`                    |
 | robinhood | `https://rh-scan.com/tx/{tx_hash}`                       |
+| arbitrum | `https://arbiscan.io/tx/{tx_hash}`                        |
+| stable | `https://stablescan.xyz/tx/{tx_hash}`                       |
+| arc | `https://testnet.arcscan.app/tx/{tx_hash}`                     |
 
 Portfolio overview: `https://debot.ai/address/{chain}/{wallet_address}`
 
@@ -295,7 +304,7 @@ debot-trade-cli sign-tx \
 
 | Chain  | Format | Description |
 |--------|--------|-------------|
-| EVM (eth / bsc / base / xlayer / monad / hyperevm / robinhood) | Hex string, e.g. `0x1234abcd` | ABI-encoded call data only — **not** a full RLP-encoded transaction. Pass `0x` for a plain ETH transfer with no calldata. |
+| EVM (eth / bsc / base / xlayer / monad / hyperevm / robinhood / arbitrum / stable / arc) | Hex string, e.g. `0x1234abcd` | ABI-encoded call data only — **not** a full RLP-encoded transaction. Pass `0x` for a plain native-token transfer with no calldata. |
 | Solana | Base64 string | Serialized transaction message bytes encoded as base64. |
 
 **Quickstart example — EVM (ETH transfer, no calldata):**
