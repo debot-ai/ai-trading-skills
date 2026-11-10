@@ -25,7 +25,7 @@ Path: `skills/trade/skills.md`
 | Multi-chain support | Supports Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, Robinhood Chain, Arbitrum, Stable, Arc, and Elysium |
 | Multi-DEX support | Integrates with Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and other DEX or trading scenarios |
 
-Elysium (ElysPump, chain ID `99901`) uses `--chain elysium` and native HYPE with 18 decimals. Its block explorer is [Elyscan](https://elyscan.live/).
+Elysium uses `--chain elysium` and native HYPE with 18 decimals. Its block explorer is [Elyscan](https://elyscan.live/).
 
 Elysium also supports USDC with 6 decimals for buys, sells, and purchases with take-profit / stop-loss orders. Its contract is `0xb47c4c8f73f009cc0c0d3f92b388d13e293f0b65`; for example, `6 USDC` uses `--amount 6000000`.
 

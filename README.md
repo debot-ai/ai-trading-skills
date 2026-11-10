@@ -25,7 +25,7 @@
 | 多链支持 | 支持 Solana、Ethereum、BNB Chain、Base、XLayer、Monad、HyperEVM、Robinhood Chain、Arbitrum、Stable、Arc、Elysium |
 | 多 DEX 支持 | 集成 Uniswap、PancakeSwap、PumpFun、FourMeme、Flap 等 DEX 或交易场景 |
 
-Elysium（ElysPump，chain ID `99901`）使用 `--chain elysium`，原生代币为 HYPE（18 位小数），区块浏览器为 [Elyscan](https://elyscan.live/)。
+Elysium 使用 `--chain elysium`，原生代币为 HYPE（18 位小数），区块浏览器为 [Elyscan](https://elyscan.live/)。
 
 Elysium 也支持使用 USDC（6 位小数）买入、卖出和买入并设置止盈止损，合约地址为 `0xb47c4c8f73f009cc0c0d3f92b388d13e293f0b65`；例如 `6 USDC` 对应 `--amount 6000000`。
 

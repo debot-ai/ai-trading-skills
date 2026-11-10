@@ -1,6 +1,6 @@
 ---
 name: debot-trade
-description: "On-chain token trading across multiple blockchains via debot-trade-cli — a server-side wallet tool that requires no browser wallet. Supports buying, selling, swapping on-chain tokens, and buying with take-profit and stop-loss orders. Works across Solana and supported EVM chains including Elysium (ElysPump, 99901), integrating with DEXes including Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and others. Use this skill whenever the user wants to swap, buy, sell, trade, or set take-profit or stop-loss rules for a token purchase — even if they don't mention \"debot\""
+description: "On-chain token trading across multiple blockchains via debot-trade-cli — a server-side wallet tool that requires no browser wallet. Supports buying, selling, swapping on-chain tokens, and buying with take-profit and stop-loss orders. Works across Solana and supported EVM chains, integrating with DEXes including Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and others. Use this skill whenever the user wants to swap, buy, sell, trade, or set take-profit or stop-loss rules for a token purchase — even if they don't mention \"debot\""
 ---
 
 # debot-trade Skill
@@ -83,9 +83,7 @@ Use these exact strings for the `--chain` parameter:
 | Arbitrum  | `arbitrum`      |
 | Stable    | `stable`        |
 | Arc       | `arc`           |
-| Elysium (ElysPump, 99901) | `elysium` |
-
-Elysium uses native HYPE (18 decimals). Use `elysium` for ElysPump transactions; `hyperevm` is a separate chain. Check `debot-trade-cli help` for Elysium support and rerun this repository's installer if the installed version does not list it.
+| Elysium   | `elysium`       |
 
 ### 3.2 Native Token Addresses
 
@@ -94,7 +92,7 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 | Chain                                   | Native Token Address                           |
 |-----------------------------------------|------------------------------------------------|
 | Solana                                  | `So11111111111111111111111111111111111111112`  |
-| All supported EVM chains, including Elysium | `0x0000000000000000000000000000000000000000`  |
+| All supported EVM chains                 | `0x0000000000000000000000000000000000000000`  |
 
 ### 3.3 Supported Stable-token Addresses (EVM chains)
 
@@ -189,7 +187,7 @@ debot-trade-cli trade \
 Key notes:
 - `--sell-percentage` (1–100): alternative to `--amount`, sells a percentage of current holdings
 - `--slippage-bps` default is 3000 (30%); range 0–10000
-- EVM chains, including Elysium: default `--base-gas-fee 100000000` (0.1 Gwei), `--priority-fee 0`, and `--tips 0`; explicitly provided fees take precedence.
+- EVM chains: default `--base-gas-fee 100000000` (0.1 Gwei), `--priority-fee 0`, and `--tips 0`; explicitly provided fees take precedence.
 - `--tips`: Solana only
 - `--anti-mev 1`: enables MEV protection
 
