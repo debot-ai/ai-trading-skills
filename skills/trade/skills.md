@@ -108,8 +108,11 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 | hyperevm | USDC | `0xb88339CB7199b77E23DB6E890353E22632Ba630f` |
 | robinhood | USDG | `0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168` |
 | arbitrum | USDC | `0xaf88d065e77c8cC2239327C5EDb3A432268e5831` |
+| elysium | USDC | `0xb47c4c8f73f009cc0c0d3f92b388d13e293f0b65` |
 
-`stable`, `arc`, and `elysium` have no configured stable-token base address in the CLI. Use the native zero address as one side of the trade. On Elysium, neither a WHYPE contract nor HyperEVM's USDC contract substitutes for the native zero address.
+`stable` and `arc` have no configured stable-token base address in the CLI; use the native zero address as one side of the trade. On Elysium, one side must be native HYPE (the zero address) or the Elysium USDC address listed above. WHYPE and HyperEVM's USDC are not accepted as Elysium base tokens.
+
+Older `v0.0.2` builds may reject Elysium USDC. Before using it, check that `debot-trade-cli trade -h` lists the address above; if it does not, rerun this repository's installer even if `version` already reports `v0.0.2`.
 
 ### 3.4 Amount Units
 
@@ -120,7 +123,7 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 | Native (ETH/BNB…) | EVM                          | 18       | `0.01 ETH` → `10000000000000000`            |
 | Native (HYPE)     | Elysium                      | 18       | `0.01 HYPE` → `10000000000000000`           |
 | Native (SOL)      | Solana                       | 9        | `1 SOL` → `1000000000`                      |
-| USDC              | ETH / Base / XLayer / Monad / HyperEVM / Arbitrum | 6 | `6 USDC` → `6000000` |
+| USDC              | ETH / Base / XLayer / Monad / HyperEVM / Arbitrum / Elysium | 6 | `6 USDC` → `6000000` |
 | USDG              | Robinhood Chain               | 6        | `6 USDG` → `6000000`                        |
 | USDC              | BSC                          | 18       | `6 USDC` → `6000000000000000000`            |
 
@@ -212,6 +215,16 @@ debot-trade-cli trade \
   --public-key <WALLET>
 ```
 
+Buy an Elysium token with 6 USDC:
+```bash
+debot-trade-cli trade \
+  --chain elysium \
+  --token-in 0xb47c4c8f73f009cc0c0d3f92b388d13e293f0b65 \
+  --token-out <TOKEN_ADDR> \
+  --amount 6000000 \
+  --public-key <WALLET>
+```
+
 Sell 50% of an ETH token:
 ```bash
 debot-trade-cli trade \
@@ -260,6 +273,8 @@ debot-trade-cli buy-tpsl \
 **Required:** `--chain`, `--token-out`, `--amount`, `--public-key`, and at least one `--take-profit` or `--stop-loss`. If `--token-in` is omitted, the CLI uses the chain's native token.
 
 Use the chain's native token or a supported stable token from §3.3 as `--token-in`. As with `trade`, at least one side of the token pair must be native or a supported stable token.
+
+For an Elysium purchase funded with 6 USDC, set `--token-in 0xb47c4c8f73f009cc0c0d3f92b388d13e293f0b65 --amount 6000000`; omitting `--token-in` still spends native HYPE.
 
 Rule format and constraints:
 
