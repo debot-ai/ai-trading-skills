@@ -374,6 +374,7 @@ Portfolio:  https://debot.ai/address/<chain>/<wallet>
 
 | Code  | Action                                                                    |
 |-------|---------------------------------------------------------------------------|
+| 112   | Parameter error — check the supplied parameters and the server's error message. An outdated CLI may also cause this error; verify its supported parameters and rerun this repository's installer if an update is needed (see §2). |
 | 401   | "Auth failed — please check your API key and secret."                    |
 | 429   | "Rate limited — please wait a moment before trying again." Do NOT retry. |
 | other | Show `message_en` or `message` field                                      |
