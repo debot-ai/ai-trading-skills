@@ -22,9 +22,10 @@ Path: `skills/trade/skills.md`
 | On-chain trading | Buy, sell, and swap any on-chain token |
 | Percentage sell | Sell a percentage of the current token holdings |
 | Buy with take profit / stop loss | Buy a token and create one or more fixed take-profit and stop-loss orders |
-| Custom transaction signing and broadcast | Sign and broadcast EVM calldata or Solana serialized transaction messages |
-| Multi-chain support | Supports Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, Robinhood Chain, Arbitrum, Stable, and Arc |
+| Multi-chain support | Supports Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, Robinhood Chain, Arbitrum, Stable, Arc, and Elysium |
 | Multi-DEX support | Integrates with Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and other DEX or trading scenarios |
+
+Elysium (ElysPump, chain ID `99901`) uses `--chain elysium` and native HYPE with 18 decimals. Its block explorer is [Elyscan](https://elyscan.live/).
 
 #### CLI Commands
 
@@ -33,14 +34,12 @@ Path: `skills/trade/skills.md`
 | `wallets` | List available wallets for the current account |
 | `trade` | Execute buy, sell, and swap transactions |
 | `buy-tpsl` | Buy a token and create fixed take-profit and stop-loss orders |
-| `sign-tx` | Sign and broadcast custom transactions |
 
 #### Use Cases
 
 - Let AI agents execute on-chain buy, sell, or swap transactions after explicit user confirmation
 - Buy tokens with tiered take-profit targets and a stop-loss
 - Manage Debot wallets and initiate trades in server-side environments
-- Integrate custom transaction signing and broadcasting for Solana or EVM chains
 - Build trading bots, automated trading tools, strategy executors, or AI trading assistants
 
 #### Safety Rules
@@ -49,7 +48,6 @@ The `debot-trade` Skill document includes built-in trading safety rules:
 
 - Trades can only use wallet addresses returned by `wallets`
 - Chain, wallet, token addresses, and trading amount must be confirmed before execution
-- Custom transaction signing must identify risky parameters and request additional confirmation when needed
 - Failed transactions must not be retried automatically; the error should be returned to the user for confirmation of the next step
 
 ## Future Roadmap

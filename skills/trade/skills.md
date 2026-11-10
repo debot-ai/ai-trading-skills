@@ -1,18 +1,17 @@
 ---
 name: debot-trade
-description: "On-chain token trading across multiple blockchains via debot-trade-cli — a server-side wallet tool that requires no browser wallet. Supports buying, selling, swapping any on-chain tokens, buying with take-profit and stop-loss orders, and signing and broadcasting custom raw transactions. Works across Solana, Ethereum, BNB Chain, Base, XLayer, Monad, HyperEVM, Robinhood Chain, Arbitrum, Stable, and Arc, integrating with DEXes including Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and others. Use this skill whenever the user wants to swap, buy, sell, trade, set take-profit or stop-loss rules for a token purchase, or sign or broadcast a custom transaction — even if they don't mention \"debot\""
+description: "On-chain token trading across multiple blockchains via debot-trade-cli — a server-side wallet tool that requires no browser wallet. Supports buying, selling, swapping on-chain tokens, and buying with take-profit and stop-loss orders. Works across Solana and supported EVM chains including Elysium (ElysPump, 99901), integrating with DEXes including Uniswap, PancakeSwap, PumpFun, FourMeme, Flap, and others. Use this skill whenever the user wants to swap, buy, sell, trade, or set take-profit or stop-loss rules for a token purchase — even if they don't mention \"debot\""
 ---
 
 # debot-trade Skill
 
-Server-side on-chain trading across 11 chains via `debot-trade-cli`. No browser wallet required.
+Server-side on-chain trading across 12 chains via `debot-trade-cli`. No browser wallet required.
 
 | # | Capability | CLI Command | Description |
 |---|-----------|-------------|-------------|
 | 1 | **List Wallets** | `wallets` | List all wallets associated with the configured API key |
 | 2 | **Trade** | `trade` | Buy / sell / swap any on-chain token across supported chains and DEXes |
 | 3 | **Buy with Take Profit / Stop Loss** | `buy-tpsl` | Buy a token and create one or more fixed take-profit / stop-loss orders |
-| 4 | **Sign & Broadcast Custom Transaction** | `sign-tx` | Sign and broadcast a custom transaction — EVM hex calldata or Solana base64 serialized message |
 
 ---
 
@@ -42,7 +41,7 @@ If this repository has already been cloned locally, the same installer can also 
 sh skills/trade/install.sh
 ```
 
-The installer and client artifacts are maintained in this repository under `skills/trade/`. Do not install from the upstream `tvyvnjs/debot-trade` repository.
+Use the installer and client artifacts maintained in this repository under `skills/trade/`.
 
 After install, run `debot-trade-cli` with no args to confirm it works and see help.
 
@@ -84,6 +83,9 @@ Use these exact strings for the `--chain` parameter:
 | Arbitrum  | `arbitrum`      |
 | Stable    | `stable`        |
 | Arc       | `arc`           |
+| Elysium (ElysPump, 99901) | `elysium` |
+
+Elysium uses native HYPE (18 decimals). Use `elysium` for ElysPump transactions; `hyperevm` is a separate chain. Check `debot-trade-cli help` for Elysium support and rerun this repository's installer if the installed version does not list it.
 
 ### 3.2 Native Token Addresses
 
@@ -92,7 +94,7 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 | Chain                                   | Native Token Address                           |
 |-----------------------------------------|------------------------------------------------|
 | Solana                                  | `So11111111111111111111111111111111111111112`  |
-| ETH / BSC / Base / XLayer / Monad / HyperEVM / Robinhood Chain / Arbitrum / Stable / Arc (EVM) | `0x0000000000000000000000000000000000000000`  |
+| All supported EVM chains, including Elysium | `0x0000000000000000000000000000000000000000`  |
 
 ### 3.3 Supported Stable-token Addresses (EVM chains)
 
@@ -101,13 +103,13 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 | eth     | USDC  | `0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48` |
 | bsc     | USDC  | `0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d` |
 | base    | USDC  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
-| xlayer  | USDC  | `0x74b7f16337b8972027f6196a17a631ac6de26d22` |
+| xlayer  | USDC  | `0xb6ceceab302e2e4948951ee7843fc24e92933061` |
 | monad   | USDC  | `0x754704Bc059F8C67012fEd69BC8A327a5aafb603` |
 | hyperevm | USDC | `0xb88339CB7199b77E23DB6E890353E22632Ba630f` |
 | robinhood | USDG | `0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168` |
 | arbitrum | USDC | `0xaf88d065e77c8cC2239327C5EDb3A432268e5831` |
 
-`stable` and `arc` do not support USDC trading. Do not use a USDC contract address as the stable-token side of a trade on either chain.
+`stable`, `arc`, and `elysium` have no configured stable-token base address in the CLI. Use the native zero address as one side of the trade. On Elysium, neither a WHYPE contract nor HyperEVM's USDC contract substitutes for the native zero address.
 
 ### 3.4 Amount Units
 
@@ -116,6 +118,7 @@ Use these as `--token-in` (to spend native) or `--token-out` (to receive native)
 | Token             | Chain                        | Decimals | Example                                     |
 |-------------------|------------------------------|----------|---------------------------------------------|
 | Native (ETH/BNB…) | EVM                          | 18       | `0.01 ETH` → `10000000000000000`            |
+| Native (HYPE)     | Elysium                      | 18       | `0.01 HYPE` → `10000000000000000`           |
 | Native (SOL)      | Solana                       | 9        | `1 SOL` → `1000000000`                      |
 | USDC              | ETH / Base / XLayer / Monad / HyperEVM / Arbitrum | 6 | `6 USDC` → `6000000` |
 | USDG              | Robinhood Chain               | 6        | `6 USDG` → `6000000`                        |
@@ -140,6 +143,7 @@ After a successful transaction, always present the explorer link:
 | arbitrum | `https://arbiscan.io/tx/{tx_hash}`                        |
 | stable | `https://stablescan.xyz/tx/{tx_hash}`                       |
 | arc | `https://testnet.arcscan.app/tx/{tx_hash}`                     |
+| elysium | `https://elyscan.live/tx/{tx_hash}`                          |
 
 Portfolio overview: `https://debot.ai/address/{chain}/{wallet_address}`
 
@@ -147,7 +151,7 @@ Portfolio overview: `https://debot.ai/address/{chain}/{wallet_address}`
 
 ## API Capabilities & Quickstart
 
-Four CLI commands cover all use cases:
+Three CLI commands cover these use cases:
 
 ### Command 1 — List Wallets
 
@@ -177,11 +181,12 @@ debot-trade-cli trade \
   [--task-id <32_hex_chars_no_hyphens>]
 ```
 
-**Required:** `--chain`, `--token-in`, `--token-out`, `--public-key`, and either `--amount` OR `--sell-percentage`
+**Required:** `--chain`, `--public-key`, at least one of `--token-in` / `--token-out`, and either `--amount` OR `--sell-percentage`. When both token addresses are specified, one must be the native token or a supported stable token.
 
 Key notes:
 - `--sell-percentage` (1–100): alternative to `--amount`, sells a percentage of current holdings
 - `--slippage-bps` default is 3000 (30%); range 0–10000
+- EVM chains, including Elysium: default `--base-gas-fee 100000000` (0.1 Gwei), `--priority-fee 0`, and `--tips 0`; explicitly provided fees take precedence.
 - `--tips`: Solana only
 - `--anti-mev 1`: enables MEV protection
 
@@ -194,6 +199,16 @@ debot-trade-cli trade \
   --token-in So11111111111111111111111111111111111111112 \
   --token-out <TOKEN_ADDR> \
   --amount 100000000 \
+  --public-key <WALLET>
+```
+
+Buy an Elysium token with 0.01 HYPE:
+```bash
+debot-trade-cli trade \
+  --chain elysium \
+  --token-in 0x0000000000000000000000000000000000000000 \
+  --token-out <TOKEN_ADDR> \
+  --amount 10000000000000000 \
   --public-key <WALLET>
 ```
 
@@ -282,57 +297,15 @@ debot-trade-cli buy-tpsl \
   --stop-loss 5000:10000
 ```
 
----
-
-### Command 4 — Sign & Broadcast Custom Transaction
-
+Buy an Elysium token with 0.01 HYPE, sell 50% at 2x, and stop out at -50%. The omitted `--token-in` defaults to the native zero address:
 ```bash
-debot-trade-cli sign-tx \
-  --chain <chain> \
-  --public-key <wallet_address> \
-  --data <data> \
-  [--to <destination_address>] \
-  [--value <wei_integer>] \
-  [--broadcast true|false]
-```
-
-**Required:** `--chain`, `--public-key`, `--data`  
-**EVM only:** `--to` (required for EVM), `--value` (default 0)  
-`--broadcast` defaults to `true`
-
-#### `--data` format by chain
-
-| Chain  | Format | Description |
-|--------|--------|-------------|
-| EVM (eth / bsc / base / xlayer / monad / hyperevm / robinhood / arbitrum / stable / arc) | Hex string, e.g. `0x1234abcd` | ABI-encoded call data only — **not** a full RLP-encoded transaction. Pass `0x` for a plain native-token transfer with no calldata. |
-| Solana | Base64 string | Serialized transaction message bytes encoded as base64. |
-
-**Quickstart example — EVM (ETH transfer, no calldata):**
-```bash
-debot-trade-cli sign-tx \
-  --chain eth \
+debot-trade-cli buy-tpsl \
+  --chain elysium \
+  --token-out <TOKEN_ADDR> \
+  --amount 10000000000000000 \
   --public-key <WALLET> \
-  --to <DEST_ADDR> \
-  --value 10000000000000000 \
-  --data 0x
-```
-
-**Quickstart example — EVM (contract call with calldata):**
-```bash
-debot-trade-cli sign-tx \
-  --chain bsc \
-  --public-key <WALLET> \
-  --to <CONTRACT_ADDR> \
-  --value 0 \
-  --data 0xa9059cbb000000000000000000000000<RECIPIENT_ADDR_NO_0x>0000000000000000000000000000000000000000000000000de0b6b3a7640000
-```
-
-**Quickstart example — Solana (custom serialized transaction):**
-```bash
-debot-trade-cli sign-tx \
-  --chain solana \
-  --public-key <WALLET> \
-  --data <BASE64_SERIALIZED_TX_MESSAGE>
+  --take-profit 10000:5000 \
+  --stop-loss 5000:10000
 ```
 
 ---
@@ -351,7 +324,6 @@ Map user language to the correct command:
 | "buy", "swap", "trade", "sell X for Y"          | `trade`                          |
 | "sell X%", "sell half my…"                      | `trade` with `--sell-percentage` |
 | "buy with take profit", "buy and stop loss"      | `buy-tpsl`                       |
-| "sign this tx", "broadcast raw tx", "send tx"   | `sign-tx`                        |
 
 ### Step 2 — Confirm Trade Details with the User
 
@@ -420,18 +392,7 @@ Never construct a trade using a wallet address that was not returned by `debot-t
 
 Never submit a trade without the user explicitly confirming the exact amount and direction. If the user's request is ambiguous (e.g., "buy some tokens" or "trade a bit"), ask for the specific amount before proceeding. Do not assume or infer quantities.
 
-### 6.3 Require Second Confirmation for Risky Custom Transactions
-
-When using `sign-tx` with custom transaction data, inspect the parameters before signing. If any of the following risk signals are present, pause and ask the user to explicitly confirm before proceeding:
-
-- `--to` is an address not seen in the conversation or not a known/verified contract
-- The transaction appears to encode an `approve()` call granting token allowance to an unknown contract
-- The `--value` is unusually large relative to the conversation context
-- The raw data encodes an action the user has not explicitly described (e.g., a transfer to a third party)
-
-Present the risk clearly before proceeding: _"This transaction will [describe action]. Please confirm you want to proceed."_
-
-### 6.4 General Risk Awareness
+### 6.3 General Risk Awareness
 
 Flag any other aspect of a requested trade that appears potentially unsafe before executing, including but not limited to:
 
